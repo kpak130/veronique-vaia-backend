@@ -1,22 +1,44 @@
 import dotenv from 'dotenv';
 import {v2 as tasks} from "@google-cloud/tasks";
+import { getServiceAccountConfig } from './config/google-auth';
 
 dotenv.config();
 
-const client = new tasks.CloudTasksClient();
+let client: tasks.CloudTasksClient | null = null;
 
 const PROJECT = process.env.GOOGLE_CLOUD_PROJECT!;
 const LOCATION = "us-central1";
 const QUEUE = "imagegen-default";
-const PARENT = client.queuePath(PROJECT, LOCATION, QUEUE);
 
 // URL of your Cloud Run worker
 const TARGET_URL = "https://veronique-vaia-backend-production.up.railway.app/generate-image";
 
 // Service Account Cloud Tasks uses to call your worker
-const INVOKER_SA = `tasks-invoker@${PROJECT}.iam.gserviceaccount.com`;
-
+// const INVOKER_SA = `tasks-invoker@${PROJECT}.iam.gserviceaccount.com`;
+const INVOKER_SA = 'firebase-adminsdk-7wd74@veronique-5c5bf.iam.gserviceaccount.com';
 export async function enqueueImages(jobs: Array<{id: string; userId: string; prompt: string}>) {
+  // Initialize client lazily when actually needed
+  if (!client) {
+    const serviceAccountConfig = getServiceAccountConfig();
+    
+    if (serviceAccountConfig) {
+      // Use Firebase service account credentials
+      client = new tasks.CloudTasksClient({
+        credentials: serviceAccountConfig,
+        projectId: process.env.GOOGLE_CLOUD_PROJECT || process.env.FIREBASE_PROJECT_ID
+      });
+    } else if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
+      // Use key file if specified
+      client = new tasks.CloudTasksClient({
+        keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS
+      });
+    } else {
+      // Fall back to Application Default Credentials
+      client = new tasks.CloudTasksClient();
+    }
+  }
+  
+  const PARENT = client.queuePath(PROJECT, LOCATION, QUEUE);
   const now = Date.now();
   const results: string[] = [];
 

@@ -19,18 +19,26 @@ app.get('/', (req, res) => {
 // API route or handler
 
 app.post("/request-images", async (req, res) => {
-  const { userId, prompts } = req.body;
+  try {
+    const { userId, prompts } = req.body;
 
-  // Example: prompts = ["cat in space", "dog on surfboard", ...]
-  const jobs = prompts.map((p: string, idx: number) => ({
-    id: `job-${Date.now()}-${idx}`,
-    userId,
-    prompt: p,
-  }));
+    // Example: prompts = ["cat in space", "dog on surfboard", ...]
+    const jobs = prompts.map((p: string, idx: number) => ({
+      id: `job-${Date.now()}-${idx}`,
+      userId,
+      prompt: p,
+    }));
 
-  const taskNames = await enqueueImages(jobs);
-
-  res.json({ message: "Enqueued", taskNames });
+    const taskNames = await enqueueImages(jobs);
+    res.json({ message: "Enqueued", taskNames });
+  } catch (error) {
+    console.error("Error enqueueing images:", error);
+    res.status(500).json({ 
+      error: "Failed to enqueue images", 
+      details: error instanceof Error ? error.message : "Unknown error",
+      note: "Make sure Google Cloud credentials are configured if using Cloud Tasks"
+    });
+  }
 });
 
 app.post("/generate-image", async (req, res) => {

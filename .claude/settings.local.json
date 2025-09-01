@@ -6,7 +6,9 @@
       "Bash(npm install:*)",
       "Bash(mkdir:*)",
       "Bash(git rm:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(gcloud auth:*)",
+      "Bash(npm run dev:*)"
     ],
     "deny": [],
     "ask": []
