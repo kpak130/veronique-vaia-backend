@@ -22,10 +22,10 @@ Express.js TypeScript API with Firestore integration.
    
    Edit `.env` with your Firebase configuration:
    - `FIREBASE_PROJECT_ID`: Your Firebase project ID
-   - `FIREBASE_SERVICE_ACCOUNT_KEY`: Service account JSON (optional, uses Application Default Credentials if not provided)
+   - Individual Firebase service account fields (optional, uses Application Default Credentials if not provided)
 
 3. **Firebase Authentication:**
-   - Option 1: Set `FIREBASE_SERVICE_ACCOUNT_KEY` in `.env` with your service account JSON
+   - Option 1: Set individual Firebase service account environment variables in `.env`
    - Option 2: Use Application Default Credentials (recommended for local development)
 
 ## Development
@@ -60,7 +60,15 @@ src/
 |----------|-------------|----------|
 | `PORT` | Server port (default: 3000) | No |
 | `FIREBASE_PROJECT_ID` | Firebase project ID | Yes |
-| `FIREBASE_SERVICE_ACCOUNT_KEY` | Service account JSON | No* |
+| `FIREBASE_TYPE` | Service account type (usually "service_account") | No* |
+| `FIREBASE_PRIVATE_KEY_ID` | Service account private key ID | No* |
+| `FIREBASE_PRIVATE_KEY` | Service account private key | No* |
+| `FIREBASE_CLIENT_EMAIL` | Service account client email | No* |
+| `FIREBASE_CLIENT_ID` | Service account client ID | No* |
+| `FIREBASE_AUTH_URI` | OAuth2 auth URI | No* |
+| `FIREBASE_TOKEN_URI` | OAuth2 token URI | No* |
+| `FIREBASE_AUTH_PROVIDER_X509_CERT_URL` | Auth provider x509 cert URL | No* |
+| `FIREBASE_CLIENT_X509_CERT_URL` | Client x509 cert URL | No* |
 
 *Required for production deployment, optional for local development with Application Default Credentials.
 
