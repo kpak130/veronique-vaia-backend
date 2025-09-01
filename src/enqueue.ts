@@ -11,7 +11,7 @@ const QUEUE = "imagegen-default";
 const PARENT = client.queuePath(PROJECT, LOCATION, QUEUE);
 
 // URL of your Cloud Run worker
-const TARGET_URL = "https://YOUR_RUN_URL/generate-image";
+const TARGET_URL = "https://veronique-vaia-backend-production.up.railway.app/generate-image";
 
 // Service Account Cloud Tasks uses to call your worker
 const INVOKER_SA = `tasks-invoker@${PROJECT}.iam.gserviceaccount.com`;
