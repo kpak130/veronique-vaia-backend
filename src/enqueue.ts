@@ -50,7 +50,7 @@ export async function enqueueImages(jobs: Array<{id: string; userId: string; pro
   for (let i = 0; i < jobs.length; i++) {
     const job = jobs[i];
     const body = Buffer.from(JSON.stringify(job)).toString("base64");
-
+    
     // Optionally stagger scheduleTime (queue rate limit already does spacing)
     const ts = now + i * 100; // 100ms apart
     const scheduleTime = {
@@ -58,12 +58,12 @@ export async function enqueueImages(jobs: Array<{id: string; userId: string; pro
       nanos: (ts % 1000) * 1e6,
     };
 
-    const [task] = await client.createTask({
+    const task = await client.createTask({
       parent: PARENT,
       task: {
         scheduleTime,
         httpRequest: {
-          httpMethod: "POST",
+          httpMethod: "POST" as const,
           url: TARGET_URL,
           headers: { "Content-Type": "application/json" },
           body,
@@ -72,7 +72,7 @@ export async function enqueueImages(jobs: Array<{id: string; userId: string; pro
       },
     });
 
-    results.push(task.name!);
+    results.push(task[0].name!);
   }
 
   return results;
