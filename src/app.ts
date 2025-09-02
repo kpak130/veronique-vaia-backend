@@ -21,7 +21,8 @@ app.get('/', (req, res) => {
 app.post("/request-images", async (req, res) => {
   try {
     const { userId, prompts } = req.body;
-
+    console.log("Received prompts:", prompts);
+    console.log("For userId:", userId);
     // Example: prompts = ["cat in space", "dog on surfboard", ...]
     const jobs = prompts.map((p: string, idx: number) => ({
       id: `job-${Date.now()}-${idx}`,
