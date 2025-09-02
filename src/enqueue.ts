@@ -49,8 +49,12 @@ export async function enqueueImages(jobs: Array<{id: string; userId: string; pro
 
   for (let i = 0; i < jobs.length; i++) {
     const job = jobs[i];
-    // const body = Buffer.from(JSON.stringify(job)).toString("base64");
-    const body = `{"id": "${job.id}"}`;
+    const rawBody = {
+      id: job.id,
+      userId: job.userId,
+      prompt: job.prompt
+    }
+    const body = Buffer.from(JSON.stringify(rawBody)).toString("base64");
     // Optionally stagger scheduleTime (queue rate limit already does spacing)
     const ts = now + i * 100; // 100ms apart
     const scheduleTime = {
