@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { enqueueImages } from "./enqueue"
+import { enqueueImages } from "./enqueue";
 
 dotenv.config();
 
