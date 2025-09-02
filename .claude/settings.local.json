@@ -8,7 +8,12 @@
       "Bash(git rm:*)",
       "Bash(git add:*)",
       "Bash(gcloud auth:*)",
-      "Bash(npm run dev:*)"
+      "Bash(npm run dev:*)",
+      "Bash(gcloud tasks queues create:*)",
+      "Bash(gcloud projects add-iam-policy-binding:*)",
+      "Bash(gcloud tasks queues list:*)",
+      "Bash(gcloud projects get-iam-policy:*)",
+      "Bash(gcloud iam service-accounts add-iam-policy-binding:*)"
     ],
     "deny": [],
     "ask": []

@@ -23,17 +23,22 @@ export async function enqueueImages(jobs: Array<{id: string; userId: string; pro
     
     if (serviceAccountConfig) {
       // Use Firebase service account credentials
+      console.log('Using Firebase service account:', serviceAccountConfig.client_email);
+      console.log('Project ID:', serviceAccountConfig.project_id);
+      
       client = new tasks.CloudTasksClient({
         credentials: serviceAccountConfig,
-        projectId: process.env.GOOGLE_CLOUD_PROJECT || process.env.FIREBASE_PROJECT_ID
+        projectId: serviceAccountConfig.project_id
       });
     } else if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
       // Use key file if specified
+      console.log('Using key file:', process.env.GOOGLE_APPLICATION_CREDENTIALS);
       client = new tasks.CloudTasksClient({
         keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS
       });
     } else {
       // Fall back to Application Default Credentials
+      console.log('Using Application Default Credentials');
       client = new tasks.CloudTasksClient();
     }
   }
